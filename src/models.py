@@ -7,26 +7,46 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
-    # Here we define columns for the table person
-    # Notice that each column is also a normal Python instance attribute.
+class user(Base):
+    __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    username = Column(String(250), nullable=False)
+    followers = Column(Integer, nullable=False)
+    email = Column(String(250), nullable=False)
+    password = Column(String(250), nullable=False)
+    post = relationship("post")
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
-    # Notice that each column is also a normal Python instance attribute.
+class post(Base):
+    __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    title = Column(String(250), nullable=False)
+    media = Column(String(250), nullable=False)
+    likes = Column(Integer, nullable=False)
+    comments = Column(Integer, nullable=False)
+    caption = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(user)
 
-    def to_dict(self):
-        return {}
+class reels(Base):
+    __tablename__ = 'reels'
+    id = Column(Integer, primary_key=True)
+    media = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(user)
+
+class history(Base):
+    __tablename__ = 'history'
+    id = Column(Integer, primary_key=True)
+    content = Column(String(250), nullable=False)
+    post_id = Column(Integer, ForeignKey('user.id'))
+    post = relationship(user)
+
+class chat(Base):
+    __tablename__ = 'chat'
+    id = Column(Integer, primary_key=True)
+    message = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(user)
 
 ## Draw from SQLAlchemy base
 try:
